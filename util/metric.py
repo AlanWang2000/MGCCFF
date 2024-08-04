@@ -25,6 +25,7 @@ def cluster(n_clusters, features, labels, count=10, method='KMeans', affinity='r
 def get_avg_metric(y_true, y_pred, count=10, show=True):
     nmi_array = np.zeros(count)
     RI_array = np.zeros(count)
+    acc_array = np.zeros(count)
     f1_array = np.zeros(count)
     ARI_array = np.zeros(count)
     y_true = y_true.reshape(-1).astype(int)
@@ -32,7 +33,7 @@ def get_avg_metric(y_true, y_pred, count=10, show=True):
         y_true -= 1
     for i in range(count):
         y_pred[i] = y_pred[i].reshape(-1).astype(int)
-        # acc_array[i] = cluster_acc(y_true, y_pred[i])
+        acc_array[i] = cluster_acc(y_true, y_pred[i])
         nmi_array[i] = normalized_mutual_info_score(y_true, y_pred[i])*100
         # RI_array[i] = rand_index_score(y_true, y_pred[i])*100
         RI_array[i] = rand_score(y_true, y_pred[i])*100
@@ -42,10 +43,10 @@ def get_avg_metric(y_true, y_pred, count=10, show=True):
     RI_avg, RI_std = RI_array.mean(), RI_array.std()
     f1_avg, f1_std = f1_array.mean(), f1_array.std()
     ARI_avg, ARI_std = ARI_array.mean(), ARI_array.std()
-
+    acc_avg, acc_std = acc_array.mean(), acc_array.std()
     if show:
-        print('NMI= {:.2f}±{:.2f} % ,  RI= {:.2f}±{:.2f} % ,  f1= {:.2f}±{:.2f} % ,  ARI= {:.2f}±{:.2f} %'
-            .format(nmi_avg, nmi_std, RI_avg, RI_std, f1_avg, f1_std, ARI_avg, ARI_std))
+        print('NMI= {:.2f}±{:.2f} % ,  RI= {:.2f}±{:.2f} % ,  f1= {:.2f}±{:.2f} % ,  ARI= {:.2f}±{:.2f} %, ACC= {:.2f}±{:.2f} %'
+            .format(nmi_avg, nmi_std, RI_avg, RI_std, f1_avg, f1_std, ARI_avg, ARI_std,acc_avg, acc_std))
 
     return [nmi_avg, nmi_std, RI_avg, RI_std, f1_avg, f1_std, ARI_avg, ARI_std]
 

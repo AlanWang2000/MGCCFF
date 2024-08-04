@@ -31,6 +31,15 @@ def readfile(filename, paired_rate=0.5, missing_rate=0.5, save=False):
         N = X[0].shape[0]
         V = 2
 
+    elif filename == 'Scene15':
+        dataset = loadmat(path+filename+'.mat')
+        X = {0: MinMaxScaler((-1, 1)).fit_transform(dataset['X'][0][0]),
+             1: MinMaxScaler((-1, 1)).fit_transform(dataset['X'][0][1])}
+        Y = dataset['Y'].T[0]
+        Y.shape = (-1)
+        N = X[0].shape[0]
+        V = 2
+        
     elif filename == 'HW':
         dataset = hdf5storage.loadmat(path+filename+'.mat')
         V = dataset['X'].shape[1]
